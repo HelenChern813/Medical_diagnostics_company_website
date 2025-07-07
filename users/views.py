@@ -1,14 +1,16 @@
-from django.conf import settings
-from django.contrib.auth.views import PasswordResetView
-from django.urls import reverse_lazy, reverse
 import secrets
 
+from django.conf import settings
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordResetView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic.edit import CreateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DetailView
+from django.views.generic.edit import CreateView, UpdateView
 
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, ProfileForm
 from users.models import User
 
 
@@ -59,3 +61,21 @@ class PasswordResetUserView(PasswordResetView):
 def logout_view(request):
     logout(request)
     return redirect("/")
+
+
+class ProfilePageView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = "profile.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProfilePageView, self).get_context_data(*args, **kwargs)
+        page_user = get_object_or_404(User, id=self.kwargs["pk"])
+        context["page_user"] = page_user
+        return context
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = ProfileForm
+    template_name = "profile_form.html"
+    success_url = reverse_lazy("users:profile")

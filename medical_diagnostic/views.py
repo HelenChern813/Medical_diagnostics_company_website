@@ -91,4 +91,10 @@ def appointment_calendar_view(request):
 
     appointments = Appointment.objects.filter(user=request.user, appointment_date__gte=timezone.now())
 
-    return render(request, "appointments/calendar.html", {"appointments": appointments,})
+    return render(
+        request,
+        "appointments/calendar.html",
+        {
+            "appointments": appointments,
+        },
+    )

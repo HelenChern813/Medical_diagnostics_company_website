@@ -1,8 +1,7 @@
 from django.conf import settings
-from django.core.validators import MinValueValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-from django.core.validators import FileExtensionValidator
 
 
 class Services(models.Model):
@@ -55,8 +54,8 @@ class Doctors(models.Model):
         upload_to="doctors/", blank=True, null=True, help_text="Загрузите нужную фотографию"
     )
     comment = models.TextField(verbose_name="Текст описания о враче", blank=True, null=True, help_text="Введите текст")
-    specialization = models.CharField(max_length=255, verbose_name='Специализация')
-    experience = models.PositiveIntegerField(default=0, verbose_name='Опыт работы (лет)')
+    specialization = models.CharField(max_length=255, verbose_name="Специализация")
+    experience = models.PositiveIntegerField(default=0, verbose_name="Опыт работы (лет)")
 
     def __str__(self):
         return f"{self.last_name} {self.first_name} {self.surname}"
@@ -167,30 +166,41 @@ class DiagnosticResults(models.Model):
     """Модель Результаты диагностики"""
 
     # Связь с пользователем, который прошел диагностику
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='diagnostic_results', verbose_name='Пользователь')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="diagnostic_results",
+        verbose_name="Пользователь",
+    )
 
     # Связь с услугой, по которой проводилась диагностика
-    service = models.ForeignKey('Services', on_delete=models.CASCADE, related_name='diagnostic_results', verbose_name='Услуга')
+    service = models.ForeignKey(
+        "Services", on_delete=models.CASCADE, related_name="diagnostic_results", verbose_name="Услуга"
+    )
 
     # Врач, который проводил диагностику (может быть из модели Doctors)
-    doctor = models.ForeignKey('Doctors', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Врач')
+    doctor = models.ForeignKey("Doctors", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Врач")
 
     # Дата и время проведения диагностики
-    date_performed = models.DateTimeField(auto_now_add=True, verbose_name='Дата и время проведения')
+    date_performed = models.DateTimeField(auto_now_add=True, verbose_name="Дата и время проведения")
 
     # Файл с результатами (PDF, изображение и т.д.)
-    result_file = models.FileField(upload_to='diagnostic_results/%Y/%m/%d/', validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'jpeg', 'png', 'dicom'])], verbose_name='Файл с результатами')
+    result_file = models.FileField(
+        upload_to="diagnostic_results/%Y/%m/%d/",
+        validators=[FileExtensionValidator(allowed_extensions=["pdf", "jpg", "jpeg", "png", "dicom"])],
+        verbose_name="Файл с результатами",
+    )
 
     # Заключение врача (текстовое поле)
-    conclusion = models.TextField(blank=True, null=True, verbose_name='Заключение врача')
+    conclusion = models.TextField(blank=True, null=True, verbose_name="Заключение врача")
 
     # Дополнительные заметки
-    notes = models.TextField(blank=True, null=True, verbose_name='Дополнительные заметки')
+    notes = models.TextField(blank=True, null=True, verbose_name="Дополнительные заметки")
 
     def __str__(self):
-        return f'Результат диагностики {self.user} по услуге {self.service} от {self.date_performed}'
+        return f"Результат диагностики {self.user} по услуге {self.service} от {self.date_performed}"
 
     class Meta:
-        verbose_name = 'Результат диагностики'
-        verbose_name_plural = 'Результаты диагностики'
-        ordering = ['-date_performed']
+        verbose_name = "Результат диагностики"
+        verbose_name_plural = "Результаты диагностики"
+        ordering = ["-date_performed"]

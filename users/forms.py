@@ -1,10 +1,11 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+
 from users.models import User
 
 
 class CustomUserCreationForm(UserCreationForm):
-    '''Форма для создания пользователя'''
+    """Форма для создания пользователя"""
 
     class Meta(UserCreationForm.Meta):
         model = User

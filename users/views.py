@@ -1,7 +1,49 @@
 from django.conf import settings
 from django.contrib.auth.views import PasswordResetView
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+import secrets
+
+from django.contrib.auth import logout
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic.edit import CreateView
+
+from users.forms import CustomUserCreationForm
+from users.models import User
+
+
+class RegisterView(CreateView):
+    model = User
+    template_name = "register.html"
+    success_url = reverse_lazy("medical_diagnostic:home_page")
+    form_class = CustomUserCreationForm
+
+    def form_valid(self, form):
+        """Оправка письма с токкеном"""
+
+        user = form.save()
+        user.is_active = False
+        token = secrets.token_hex(16)
+        user.token = token
+        user.save()
+        host = self.request.get_host()
+        url = f"http://{host}/confirm/{token}/"
+        send_mail(
+            subject="Подтверждение почты",
+            message=f"Перейдите по ссылке для подверждения почты: {url}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+        )
+        return super().form_valid(form)
+
+
+def email_verification(request, token):
+    """Подтверждение почты"""
+
+    user = get_object_or_404(User, token=token)
+    user.is_active = True
+    user.save()
+    return redirect(reverse("users:login"))
 
 
 class PasswordResetUserView(PasswordResetView):

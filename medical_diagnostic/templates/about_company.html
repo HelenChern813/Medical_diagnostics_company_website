@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}О компании{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-4">
+    <div id="list-example" class="list-group">
+      <a class="list-group-item list-group-item-action" href="#list-item-1">История компании</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-2">Миссия</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-3">Ценности</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-4">Команда врачей</a>
+    </div>
+  </div>
+  <div class="col-8">
+    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+      <h4 id="list-item-1">История компании</h4>
+      <p>
+        <ul>
+        {% for content in get_content %}
+          {% if content.name_content == 'История компании' %}
+            <p>{{ content.text_content }}</p>
+          {% endif %}
+        {% endfor %}
+        </ul>
+
+      </p>
+      <h4 id="list-item-2">Миссия</h4>
+      <p>
+        <ul>
+        {% for content in get_content %}
+          {% if content.name_content == 'Миссия' %}
+            <p>{{ content.text_content }}</p>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      </p>
+
+      <h4 id="list-item-3">Ценности</h4>
+      <p>
+        <ul>
+        {% for content in get_content %}
+          {% if content.name_content == 'Ценности' %}
+            <p>{{ content.text_content }}</p>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      </p>
+      <h4 id="list-item-4">Команда врачей</h4>
+      <p>
+        {% for doctors in get_doctors %}
+          <p>{{ doctors.full_name }}</p>
+          <p>{{ doctors.photo_doctor }}</p>
+        {% endfor %}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

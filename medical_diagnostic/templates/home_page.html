@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-4">
+    <div id="list-example" class="list-group">
+      <a class="list-group-item list-group-item-action" href="#list-item-1">Описание компании</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-2">Перечень предоставляемых услуг</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-3">Контактная информация</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-4">Форма для обратной связи</a>
+    </div>
+  </div>
+  <div class="col-8">
+    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+      <h4 id="list-item-1">Описание компании</h4>
+      <p>
+        <ul>
+        {% for content in get_content %}
+          {% if content.name_content == 'Описание компании' %}
+            <p>{{ content.text_content }}</p>
+          {% endif %}
+        {% endfor %}
+        </ul>
+
+      </p>
+      <h4 id="list-item-2">Перечень предоставляемых услуг</h4>
+      <p>
+        <ul class="list-group list-group-flush">
+          {% for services in get_services %}
+            <li class="list-group-item">{{ services.name }}</li>
+          {% endfor %}
+        </ul>
+      </p>
+
+      <h4 id="list-item-3">Контактная информация</h4>
+      <p>
+        <ul>
+        {% for contacts in get_contacts %}
+          <p>{{ contacts.name }}</p>
+          <p>{{ contacts.address }}</p>
+          <p>{{ contacts.phone_company }}</p>
+          <p>{{ contacts.head_physician }}</p>
+          <p>{{ contacts.email_company }}</p>
+        {% endfor %}
+        </ul>
+      </p>
+      <h4 id="list-item-4">Форма для обратной связи</h4>
+      <p>Если у вас остались вопросы / комментарии, которые Вы бы хотели с нами обсудить или передать, то пожалуйста, заполните
+        <a href="{% url 'medical_diagnostic:feedback' %}" class="link-primary">Форму обратной связи</a>
+        Мы рады быть на связи и становиться лучше для Вас!
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

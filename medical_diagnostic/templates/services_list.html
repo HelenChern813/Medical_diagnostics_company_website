@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Услуги{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-4">
+    <div id="list-example" class="list-group">
+      <a class="list-group-item list-group-item-action" href="#list-item-1">Категория 1</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-2">Категория 2</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-3">Категория 3</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-4">Категория 4</a>
+    </div>
+  </div>
+  <div class="col-8">
+    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+      <h4 id="list-item-1">Категория 1</h4>
+      <p>
+        Карточки
+      </p>
+      <h4 id="list-item-2">Категория 2</h4>
+      <p>
+        Карточки
+      </p>
+
+      <h4 id="list-item-3">Категория 3</h4>
+      <p>
+        Карточки
+      </p>
+      <h4 id="list-item-4">Категория 4</h4>
+      <p>
+        Карточки
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

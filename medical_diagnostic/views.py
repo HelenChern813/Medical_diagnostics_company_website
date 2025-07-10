@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
@@ -5,9 +6,10 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.core.mail import send_mail
 
-from .forms import AppointmentForm
-from .models import Appointment, Doctors
+from .forms import AppointmentForm, FeedbackForm
+from .models import Appointment, Services, Contacts
 
 
 class AppointmentListView(LoginRequiredMixin, ListView):
@@ -93,8 +95,58 @@ def appointment_calendar_view(request):
 
     return render(
         request,
-        "appointments/calendar.html",
+        "calendar.html",
         {
             "appointments": appointments,
         },
     )
+
+
+class ServicesListView(LoginRequiredMixin, ListView):
+    model = Services
+    template_name = "services_list.html"
+    context_object_name = "services"
+
+
+class ServicesDetailView(LoginRequiredMixin, DetailView):
+    model = Services
+    template_name = "services_detail.html"
+    context_object_name = "service"
+
+
+class ContactsListView(LoginRequiredMixin, ListView):
+    model = Contacts
+    template_name = "contacts_detail.html"
+    context_object_name = "contact"
+
+
+def directions_map(request):
+    company = Contacts.objects.first()
+    context = {
+        'company': company,
+    }
+    return render(request, 'contacts.html', context)
+
+
+def feedback_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save()
+
+            # Отправка email администратору
+            send_mail(
+                'Новое сообщение обратной связи',
+                f'Получено новое сообщение от {feedback.name} ({feedback.email}).\n\n'
+                f'Сообщение: {feedback.message}',
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.ADMIN_EMAIL],
+                fail_silently=False,
+            )
+
+            messages.success(request, 'Ваше сообщение отправлено! Мы свяжемся с вами в ближайшее время.')
+            return redirect('medical_diagnostic:home_page')
+    else:
+        form = FeedbackForm()
+
+    return render(request, 'feedback_form.html', {'form': form})

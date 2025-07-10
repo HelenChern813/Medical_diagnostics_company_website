@@ -1,0 +1,51 @@
+{% extends 'base.html' %}  <!-- Если используете базовый шаблон -->
+{% load static %}
+{% block title %}Карта проезда{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Контакты</h1>
+    
+    <!-- Блок с адресом компании -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ company.name }}</h5>
+            <p class="card-text">{{ company.address }}</p>
+        </div>
+    </div>
+
+    <!-- Яндекс.Карта -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Как добраться</h5>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключение API Яндекс.Карт -->
+<script src="https://api-maps.yandex.ru/2.1/?apikey=ВАШ_API_КЛЮЧ&lang=ru_RU" type="text/javascript"></script>
+
+<script type="text/javascript">
+    // Инициализация карты
+    ymaps.ready(init);
+
+    function init() {
+        // Создаем карту с центром в координатах компании
+        var myMap = new ymaps.Map("map", {
+            center: [{{ company.latitude }}, {{ company.longitude }}],
+            zoom: 15
+        });
+
+        // Добавляем метку компании
+        var myPlacemark = new ymaps.Placemark(
+            [{{ company.latitude }}, {{ company.longitude }}],
+            {
+                hintContent: '{{ company.name }}',
+                balloonContent: '{{ company.address }}'
+            }
+        );
+
+        myMap.geoObjects.add(myPlacemark);
+    }
+</script>
+{% endblock %}

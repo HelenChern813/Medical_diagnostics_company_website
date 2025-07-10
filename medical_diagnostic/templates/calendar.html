@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Календарь записей{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>Календарь записей</h5>
+    </div>
+    <div class="card-body">
+        <div id="calendar"></div>
+    </div>
+</div>
+
+{% block scripts %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/ru.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'ru',
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: [
+            {% for appointment in appointments %}
+            {
+                title: '{{ appointment.service.name }} - {{ appointment.service.doctor.full_name }}',
+                start: '{{ appointment.appointment_date|date:"Y-m-d\TH:i:s" }}',
+                url: '{% url "appointments:detail" appointment.pk %}',
+                color: '{% if appointment.status == "confirmed" %}#28a745{% elif appointment.status == "pending" %}#ffc107{% elif appointment.status == "cancelled" %}#6c757d{% else %}#17a2b8{% endif %}'
+            },
+            {% endfor %}
+        ],
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+            window.location.href = info.event.url;
+        }
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}
+{% endblock %}

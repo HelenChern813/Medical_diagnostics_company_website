@@ -1,0 +1,33 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Медицинская диагностика{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
+</head>
+<body>
+<div class="row text-center">
+    <div class="container">
+        <h1><strong>Ваш путь к здоровью начинается здесь </strong></h1>
+    </div>
+    <div class="container">
+        <header>
+            {% include 'includes/header.html' %}
+        </header>
+    </div>
+    <div class="container">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <div class="container-fluid fixed-bottom bg-body-tertiary">
+        <h5>OOO "Medical_diagnostic"</h5>
+    </div>
+
+</div>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+import requests
 
 
 class Services(models.Model):
@@ -42,6 +43,7 @@ class Content(models.Model):
     class Meta:
         verbose_name = "Контент"
         verbose_name_plural = "Контент"
+        ordering = ["name_content",]
 
 
 class Doctors(models.Model):
@@ -73,18 +75,19 @@ class Doctors(models.Model):
 class Contacts(models.Model):
     """Модель контактов компании"""
 
-    address = models.CharField(max_length=250, verbose_name="Адрес компании", help_text="Введите адрес компании")
+    name = models.CharField(max_length=250, verbose_name="Название компании", default='Diagnostic')
+    address = models.TextField(verbose_name="Адрес компании", help_text="Введите адрес компании", default='Diagnostic')
     phone_company = models.CharField(
-        max_length=15, verbose_name="Телефон компании", help_text="Введите телефон для связи"
+        max_length=15, verbose_name="Телефон компании", help_text="Введите телефон для связи", blank=True, null=True
     )
     head_physician = models.CharField(
-        max_length=250, verbose_name="ФИО главврача компании", help_text="Введите ФИО главврача"
+        max_length=250, verbose_name="ФИО главврача компании", help_text="Введите ФИО главврача", blank=True, null=True
     )
     email_company = models.EmailField(
-        unique=True, verbose_name="Электронная почта", help_text="Введите электронную почту компании"
+        unique=True, verbose_name="Электронная почта", help_text="Введите электронную почту компании", blank=True, null=True
     )
     legal_entity = models.CharField(
-        max_length=250, verbose_name="Юридичесок лицо", help_text="Юридическое лицо представляющее компанию"
+        max_length=250, verbose_name="Юридичесок лицо", help_text="Юридическое лицо представляющее компанию", blank=True, null=True
     )
     link_company = models.URLField(max_length=500, blank=True, null=True, verbose_name="Ссылка на компанию")
     actual = models.BooleanField(
@@ -92,9 +95,42 @@ class Contacts(models.Model):
         verbose_name="Актуальность контактной информации о компании",
         help_text="Действующая ли информация",
     )
+    latitude = models.FloatField(verbose_name="Широта (координата Y)")
+    longitude = models.FloatField(verbose_name="Долгота (координата X)")
 
     def __str__(self):
         return self.address
+
+    def save(self, *args, **kwargs):
+        if not self.latitude or not self.longitude:
+            self.geocode()  # Автоматически определяем координаты при сохранении
+        super().save(*args, **kwargs)
+
+    def geocode(self):
+        """Получает координаты через Яндекс.Geocoder API"""
+
+        if not self.address:
+            return None
+
+        # Формируем запрос к API
+        url = "https://geocode-maps.yandex.ru/1.x/"
+        params = {
+            "apikey": settings.YANDEX_GEOCODER_API_KEY,  # Ключ из настроек Django
+            "geocode": self.address,
+            "format": "json",
+        }
+
+        try:
+            response = requests.get(url, params=params)
+            data = response.json()
+
+            # Извлекаем координаты из ответа
+            pos = data["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"]
+            self.longitude, self.latitude = map(float, pos.split())
+            return True
+        except Exception as e:
+            print(f"Ошибка геокодирования: {e}")
+            return False
 
     class Meta:
         verbose_name = "Контакт"
@@ -112,7 +148,7 @@ class Appointment(models.Model):
     ]
 
     user = models.ForeignKey(
-        "Users", on_delete=models.CASCADE, verbose_name="Пользователь", related_name="appointments"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="appointments"
     )
     service = models.ForeignKey(
         "Services", on_delete=models.CASCADE, verbose_name="Услуга", related_name="appointments"
@@ -204,3 +240,20 @@ class DiagnosticResults(models.Model):
         verbose_name = "Результат диагностики"
         verbose_name_plural = "Результаты диагностики"
         ordering = ["-date_performed"]
+
+
+class Feedback(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Имя')
+    email = models.EmailField(verbose_name='Email')
+    phone = models.CharField(max_length=20, blank=True, verbose_name='Телефон')
+    message = models.TextField(verbose_name='Сообщение')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата отправки')
+    is_processed = models.BooleanField(default=False, verbose_name='Обработано')
+
+    def __str__(self):
+        return f'Сообщение от {self.name} ({self.email})'
+
+    class Meta:
+        verbose_name = 'Обратная связь'
+        verbose_name_plural = 'Обратные связи'
+        ordering = ['-created_at']

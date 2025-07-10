@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+<div class="row text-center mt-2">
+    <div class="card-header">
+        <h3>Мой профиль</h3>
+    </div>
+    <div class="card-body">
+        {% if object.avatar %}
+            <img src="{{ object.avatar.url }}" class="img-thumbnail mb-3" width="150">
+        {% endif %}
+        <p><strong>Имя:</strong> {{ user.first_name|default:"Не указано" }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+
+
+
+        <a href="{% url 'users:profile_edit' object.pk %}" class="btn btn-primary mt-3">
+                        Редактировать профиль
+        </a>
+    </div>
+</div>
+
+{% endblock %}

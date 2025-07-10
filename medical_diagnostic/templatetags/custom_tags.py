@@ -1,5 +1,6 @@
 from django import template
-from medical_diagnostic.models import Content, Services, Contacts, Doctors
+
+from medical_diagnostic.models import Contacts, Content, Doctors, Services
 
 register = template.Library()
 

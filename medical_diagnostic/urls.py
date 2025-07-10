@@ -1,5 +1,6 @@
 from django.urls import path
 from django.views.generic import TemplateView
+
 from medical_diagnostic.apps import MedicalDiagnosticConfig
 
 from . import views
@@ -16,8 +17,8 @@ urlpatterns = [
     path("services_list/", views.ServicesListView.as_view(), name="services_list"),
     path("services/<int:pk>/", views.ServicesDetailView.as_view(), name="service_detail"),
     path("contact/", views.ContactsListView.as_view(), name="contact_detail"),
-    path('directions_map/', views.directions_map, name='directions_map'),
-    path('feedback/', views.feedback_view, name='feedback'),
-    path("home_page/", TemplateView.as_view(template_name='home_page.html'), name="home_page"),
-    path("about_company/", TemplateView.as_view(template_name='about_company.html'), name="about_company")
+    path("directions_map/", views.directions_map, name="directions_map"),
+    path("feedback/", views.feedback_view, name="feedback"),
+    path("home_page/", TemplateView.as_view(template_name="home_page.html"), name="home_page"),
+    path("about_company/", TemplateView.as_view(template_name="about_company.html"), name="about_company"),
 ]

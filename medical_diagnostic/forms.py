@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from .models import Appointment, Doctors, Services, Feedback
+from .models import Appointment, Doctors, Feedback, Services
 
 
 class AppointmentForm(forms.ModelForm):
@@ -50,16 +50,16 @@ class AppointmentForm(forms.ModelForm):
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ['name', 'email', 'phone', 'message']
+        fields = ["name", "email", "phone", "message"]
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "phone": forms.TextInput(attrs={"class": "form-control"}),
+            "message": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
         }
         labels = {
-            'name': 'Ваше имя',
-            'email': 'Email для ответа',
-            'phone': 'Контактный телефон',
-            'message': 'Ваше сообщение',
+            "name": "Ваше имя",
+            "email": "Email для ответа",
+            "phone": "Контактный телефон",
+            "message": "Ваше сообщение",
         }

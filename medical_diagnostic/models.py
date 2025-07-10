@@ -1,8 +1,8 @@
+import requests
 from django.conf import settings
 from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
-import requests
 
 
 class Services(models.Model):
@@ -43,7 +43,9 @@ class Content(models.Model):
     class Meta:
         verbose_name = "Контент"
         verbose_name_plural = "Контент"
-        ordering = ["name_content",]
+        ordering = [
+            "name_content",
+        ]
 
 
 class Doctors(models.Model):
@@ -75,8 +77,8 @@ class Doctors(models.Model):
 class Contacts(models.Model):
     """Модель контактов компании"""
 
-    name = models.CharField(max_length=250, verbose_name="Название компании", default='Diagnostic')
-    address = models.TextField(verbose_name="Адрес компании", help_text="Введите адрес компании", default='Diagnostic')
+    name = models.CharField(max_length=250, verbose_name="Название компании", default="Diagnostic")
+    address = models.TextField(verbose_name="Адрес компании", help_text="Введите адрес компании", default="Diagnostic")
     phone_company = models.CharField(
         max_length=15, verbose_name="Телефон компании", help_text="Введите телефон для связи", blank=True, null=True
     )
@@ -84,10 +86,18 @@ class Contacts(models.Model):
         max_length=250, verbose_name="ФИО главврача компании", help_text="Введите ФИО главврача", blank=True, null=True
     )
     email_company = models.EmailField(
-        unique=True, verbose_name="Электронная почта", help_text="Введите электронную почту компании", blank=True, null=True
+        unique=True,
+        verbose_name="Электронная почта",
+        help_text="Введите электронную почту компании",
+        blank=True,
+        null=True,
     )
     legal_entity = models.CharField(
-        max_length=250, verbose_name="Юридичесок лицо", help_text="Юридическое лицо представляющее компанию", blank=True, null=True
+        max_length=250,
+        verbose_name="Юридичесок лицо",
+        help_text="Юридическое лицо представляющее компанию",
+        blank=True,
+        null=True,
     )
     link_company = models.URLField(max_length=500, blank=True, null=True, verbose_name="Ссылка на компанию")
     actual = models.BooleanField(
@@ -243,17 +253,17 @@ class DiagnosticResults(models.Model):
 
 
 class Feedback(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Имя')
-    email = models.EmailField(verbose_name='Email')
-    phone = models.CharField(max_length=20, blank=True, verbose_name='Телефон')
-    message = models.TextField(verbose_name='Сообщение')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата отправки')
-    is_processed = models.BooleanField(default=False, verbose_name='Обработано')
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    email = models.EmailField(verbose_name="Email")
+    phone = models.CharField(max_length=20, blank=True, verbose_name="Телефон")
+    message = models.TextField(verbose_name="Сообщение")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата отправки")
+    is_processed = models.BooleanField(default=False, verbose_name="Обработано")
 
     def __str__(self):
-        return f'Сообщение от {self.name} ({self.email})'
+        return f"Сообщение от {self.name} ({self.email})"
 
     class Meta:
-        verbose_name = 'Обратная связь'
-        verbose_name_plural = 'Обратные связи'
-        ordering = ['-created_at']
+        verbose_name = "Обратная связь"
+        verbose_name_plural = "Обратные связи"
+        ordering = ["-created_at"]

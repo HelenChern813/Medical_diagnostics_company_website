@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AppointmentForm, FeedbackForm
-from .models import Appointment, Contacts, Services
+from .models import Appointment, Contacts, DiagnosticResults, Services
 
 
 class AppointmentListView(LoginRequiredMixin, ListView):
@@ -50,9 +50,7 @@ class AppointmentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        response = super().form_valid(form)
-        messages.success(self.request, "Запись на прием успешно создана!")
-        return response
+        return super().form_valid(form)
 
 
 class AppointmentUpdateView(LoginRequiredMixin, UpdateView):
@@ -117,7 +115,7 @@ class ServicesDetailView(LoginRequiredMixin, DetailView):
 class ContactsListView(LoginRequiredMixin, ListView):
     model = Contacts
     template_name = "contacts_detail.html"
-    context_object_name = "contact"
+    context_object_name = "contacts"
 
 
 def directions_map(request):
@@ -150,3 +148,80 @@ def feedback_view(request):
         form = FeedbackForm()
 
     return render(request, "feedback_form.html", {"form": form})
+
+
+class DiagnosticResultsListView(LoginRequiredMixin, ListView):
+    model = DiagnosticResults
+    template_name = "diagnostic_results_list.html"
+    context_object_name = "results"
+    paginate_by = 10
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return DiagnosticResults.objects.all().order_by("-date_performed")
+        return DiagnosticResults.objects.filter(user=self.request.user).order_by("-date_performed")
+
+
+class DiagnosticResultsDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = DiagnosticResults
+    template_name = "diagnostic_results_detail.html"
+    context_object_name = "result"
+
+    def test_func(self):
+        result = self.get_object()
+        return self.request.user == result.user or self.request.user.is_staff
+
+
+class DoctorRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_doctors
+
+
+class DoctorAppointmentConfirmView(LoginRequiredMixin, View):
+    """Подтверждение записи врачом"""
+
+    def post(self, request, pk):
+        appointment = get_object_or_404(Appointment, pk=pk, service__doctor=request.user)
+
+        if appointment.status == "pending":
+            appointment.confirm()
+            messages.success(request, "Запись подтверждена!")
+        else:
+            messages.warning(request, "Нельзя подтвердить запись с текущим статусом!")
+
+        return redirect("appointments:doctor-list")
+
+
+class DoctorAppointmentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Appointment
+    template_name = "doctor_appointments.html"
+    context_object_name = "appointments"
+
+    def test_func(self):
+        return self.request.user.is_doctors
+
+    def get_queryset(self):
+        return Appointment.objects.filter(doctor=self.request.user).order_by("-appointment_date")
+
+
+class ConfirmAppointmentView(DoctorRequiredMixin, View):
+    def post(self, request, pk):
+        appointment = get_object_or_404(
+            Appointment,
+            pk=pk,
+        )
+        if appointment.confirm(request.user):
+            messages.success(request, "Запись успешно подтверждена")
+
+            # Отправка уведомления пациенту
+            send_mail(
+                "Ваша запись подтверждена",
+                f'Доктор {request.user.get_full_name()} подтвердил вашу запись на {appointment.appointment_date.strftime("%d.%m.%Y в %H:%M")}',
+                settings.DEFAULT_FROM_EMAIL,
+                [appointment.user.email],
+                fail_silently=False,
+            )
+        else:
+            messages.error(request, "Не удалось подтвердить запись")
+
+        return redirect("medical_diagnostic:doctor_appointments")

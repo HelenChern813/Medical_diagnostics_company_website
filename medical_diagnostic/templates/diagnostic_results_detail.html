@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Результат диагностики</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ result.service.name }}</h5>
+        <p class="card-text"><strong>Дата:</strong> {{ result.date_performed|date:"d.m.Y H:i" }}</p>
+        <p class="card-text"><strong>Врач:</strong> {{ result.doctor }}</p>
+        <p class="card-text"><strong>Статус:</strong> {{ result.get_status_display }}</p>
+        <p class="card-text"><strong>Заключение:</strong><br>{{ result.conclusion }}</p>
+        <p class="card-text"><strong>Заметки:</strong><br>{{ result.notes }}</p>
+    </div>
+</div>
+{% endblock %}

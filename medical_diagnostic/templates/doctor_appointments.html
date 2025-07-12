@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Записи пациентов{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Записи пациентов</h2>
+
+    {% if appointments %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Дата и время</th>
+                    <th>Пациент</th>
+                    <th>Услуга</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.appointment_date|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        {{ appointment.user.get_full_name }}
+                        {% if appointment.user.phone_number %}
+                        <br><small class="text-muted">{{ appointment.user.phone_number }}</small>
+                        {% endif %}
+                    </td>
+                    <td>{{ appointment.service.name }}</td>
+                    <td>
+                        <span class="badge
+                            {% if appointment.status == 'confirmed' %}bg-success
+                            {% elif appointment.status == 'pending' %}bg-warning text-dark
+                            {% elif appointment.status == 'completed' %}bg-info
+                            {% else %}bg-secondary{% endif %}">
+                            {{ appointment.get_status_display }}
+                        </span>
+                        {% if appointment.confirmed_by %}
+                        <br><small class="text-muted">Подтверждено: {{ appointment.confirmation_date|date:"d.m.Y H:i" }}</small>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if appointment.status == 'pending' %}
+                        <form method="post" action="{% url 'medical_diagnostic:confirm_appointment' appointment.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-success" title="Подтвердить запись">
+                                <i class="bi bi-check-circle"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                        <a href="{% url 'medical_diagnostic:appointment_detail' appointment.pk %}"
+                           class="btn btn-sm btn-outline-primary" title="Просмотр">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        У вас нет записей пациентов.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

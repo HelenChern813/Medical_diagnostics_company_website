@@ -21,4 +21,12 @@ urlpatterns = [
     path("feedback/", views.feedback_view, name="feedback"),
     path("home_page/", TemplateView.as_view(template_name="home_page.html"), name="home_page"),
     path("about_company/", TemplateView.as_view(template_name="about_company.html"), name="about_company"),
+    path("diagnostic_results_list/", views.DiagnosticResultsListView.as_view(), name="diagnostic_results_list"),
+    path(
+        "diagnostic_results_detail/<int:pk>/",
+        views.DiagnosticResultsDetailView.as_view(),
+        name="diagnostic_results_detail",
+    ),
+    path("doctor/appointments/", views.DoctorAppointmentListView.as_view(), name="doctor_appointments"),
+    path("doctor/appointments/<int:pk>/confirm/", views.ConfirmAppointmentView.as_view(), name="confirm_appointment"),
 ]

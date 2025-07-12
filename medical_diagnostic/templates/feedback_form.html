@@ -61,4 +61,16 @@
         <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
 </div>
+<script>
+document.getElementById('id_message').addEventListener('input', function() {
+  const errorElement = document.getElementById('message-error');
+  if (this.value.length > 1000) {
+    errorElement.classList.remove('d-none');
+    this.classList.add('is-invalid');
+  } else {
+    errorElement.classList.add('d-none');
+    this.classList.remove('is-invalid');
+  }
+});
+</script>
 {% endblock %}

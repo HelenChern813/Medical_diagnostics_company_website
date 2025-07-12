@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
+
 {% load custom_tags %}
 
 {% block title %}Главная страница{% endblock %}
 
-{% get_content as my_content %}
-
 {% block content %}
+
+{% get_content as my_content %}
+{% get_services as my_services %}
+{% get_contacts as my_contact %}
+
+{% block breadcrumbs %}
+  {% include 'includes/breadcrumbs.html' with breadcrumbs=breadcrumbs %}
+{% endblock %}
+
 <div class="row">
   <div class="col-4">
     <div id="list-example" class="list-group">
@@ -20,7 +28,6 @@
       <h4 id="list-item-1">Описание компании</h4>
       <p>
         {% for content in my_content %}
-          <h3>123</h3>
           {% if content.name_content == 'Описание компании' %}
             <h5>{{ content.text_content }}</h5>
           {% endif %}
@@ -29,7 +36,7 @@
       <h4 id="list-item-2">Перечень предоставляемых услуг</h4>
       <p>
         <ul class="list-group list-group-flush">
-          {% for services in get_services %}
+          {% for services in my_services %}
             <li class="list-group-item">{{ services.name }}</li>
           {% endfor %}
         </ul>
@@ -38,7 +45,7 @@
       <h4 id="list-item-3">Контактная информация</h4>
       <p>
         <ul>
-        {% for contacts in get_contacts %}
+        {% for contacts in my_contact %}
           <p>{{ contacts.name }}</p>
           <p>{{ contacts.address }}</p>
           <p>{{ contacts.phone_company }}</p>

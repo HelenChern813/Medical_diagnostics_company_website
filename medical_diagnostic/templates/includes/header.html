@@ -18,6 +18,13 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'users:profile' user.pk %}">Личный кабинет</a>
         </li>
+        {% if user.is_authenticated and user.doctor_profile %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'medical_diagnostic:doctor_appointments' %}">
+            <i class="bi bi-calendar-check"></i> Мои записи
+            </a>
+        </li>
+        {% endif %}
     </div>
   </div>
 </nav>

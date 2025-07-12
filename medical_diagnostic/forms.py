@@ -1,11 +1,16 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from .models import Appointment, Doctors, Feedback, Services
+from .models import Appointment, DiagnosticResults, Feedback
+
+User = get_user_model()
 
 
 class AppointmentForm(forms.ModelForm):
-    doctor = forms.ModelChoiceField(queryset=Doctors.objects.all(), label="Врач", required=True)
+    doctor = forms.ModelChoiceField(
+        queryset=User.objects.filter(is_doctors=True), to_field_name="last_name", label="Врач", required=True
+    )
 
     class Meta:
         model = Appointment
@@ -18,23 +23,6 @@ class AppointmentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-
-        if user:
-            # Динамически фильтруем услуги по выбранному врачу
-            self.fields["service"].queryset = Services.objects.none()
-
-            if "doctor" in self.data:
-                try:
-                    doctor_id = int(self.data.get("doctor"))
-                    self.fields["service"].queryset = Services.objects.filter(
-                        doctor_id=doctor_id, is_active=True
-                    ).order_by("name")
-                except (ValueError, TypeError):
-                    pass
-            elif self.instance.pk:
-                self.fields["service"].queryset = self.instance.service.doctor.services_set.filter(
-                    is_active=True
-                ).order_by("name")
 
         self.fields["appointment_date"].input_formats = ["%Y-%m-%dT%H:%M"]
 
@@ -63,3 +51,26 @@ class FeedbackForm(forms.ModelForm):
             "phone": "Контактный телефон",
             "message": "Ваше сообщение",
         }
+
+
+class DiagnosticResultsForm(forms.ModelForm):
+    class Meta:
+        model = DiagnosticResults
+        fields = ["service", "doctor", "result_file", "conclusion", "notes"]
+        widgets = {
+            "conclusion": forms.Textarea(attrs={"rows": 4}),
+            "notes": forms.Textarea(attrs={"rows": 2}),
+        }
+        labels = {
+            "service": "Услуга",
+            "doctor": "Врач",
+            "result_file": "Файл с результатами",
+            "conclusion": "Заключение врача",
+            "notes": "Дополнительные заметки",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+        self.fields["result_file"].widget.attrs.update({"class": "form-control-file"})

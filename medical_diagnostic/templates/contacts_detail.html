@@ -3,5 +3,31 @@
 {% block title %}Контакты{% endblock %}
 
 {% block content %}
-Описание контактов {{ client.email }}
+<div class="container">
+  <div class="row">
+      <h4>Наши контакты для связи</h4>
+    {% for contact in contacts %}
+    <div class="col-md-6">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Название компании - {{ contact.name }}</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><i class="bi bi-geo-alt"></i> Адрес компании -  {{ contact.address }}</li>
+            <li class="list-group-item"><i class="bi bi-telephone"></i> Телефон компании -{{ contact.phone_company }}</li>
+            <li class="list-group-item"><i class="bi bi-envelope"></i> Электронная почта - {{ contact.email_company }}</li>
+              <li class="list-group-item"><i class="bi bi-envelope"></i> ФИО главврача компании - {{ contact.head_physician }}</li>
+              <li class="list-group-item"><i class="bi bi-geo-alt"></i> Юридическое лицо представляющее компанию - {{ contact.legal_entity }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="container text-center">
+
+    {% for contact in contacts %}
+    <h5>Ссылка на компанию - {{contact.link_company}} </h5>
+    {% endfor %}
+</div>
 {% endblock %}

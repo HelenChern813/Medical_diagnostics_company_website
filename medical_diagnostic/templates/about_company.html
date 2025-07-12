@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 
+{% load custom_tags %}
+
 {% block title %}О компании{% endblock %}
 
 {% block content %}
+
+{% get_content as contents %}
+{% get_doctors as doctors %}
+
 <div class="row">
   <div class="col-4">
     <div id="list-example" class="list-group">
@@ -17,7 +23,7 @@
       <h4 id="list-item-1">История компании</h4>
       <p>
         <ul>
-        {% for content in get_content %}
+        {% for content in contents %}
           {% if content.name_content == 'История компании' %}
             <p>{{ content.text_content }}</p>
           {% endif %}
@@ -28,7 +34,7 @@
       <h4 id="list-item-2">Миссия</h4>
       <p>
         <ul>
-        {% for content in get_content %}
+        {% for content in contents %}
           {% if content.name_content == 'Миссия' %}
             <p>{{ content.text_content }}</p>
           {% endif %}
@@ -39,7 +45,7 @@
       <h4 id="list-item-3">Ценности</h4>
       <p>
         <ul>
-        {% for content in get_content %}
+        {% for content in contents %}
           {% if content.name_content == 'Ценности' %}
             <p>{{ content.text_content }}</p>
           {% endif %}
@@ -48,9 +54,9 @@
       </p>
       <h4 id="list-item-4">Команда врачей</h4>
       <p>
-        {% for doctors in get_doctors %}
-          <p>{{ doctors.full_name }}</p>
-          <p>{{ doctors.photo_doctor }}</p>
+        {% for doctor in doctors %}
+          <p>{{ doctor.full_name }}</p>
+          <p>{{ doctor.photo_doctor }}</p>
         {% endfor %}
       </p>
     </div>

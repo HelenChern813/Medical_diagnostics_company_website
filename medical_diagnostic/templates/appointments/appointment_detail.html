@@ -63,6 +63,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    {% if request.user.is_doctors and object.status == 'pending' %}
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <form method="post" action="{% url 'medical_diagnostic:confirm_appointment' object.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Подтвердить запись</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

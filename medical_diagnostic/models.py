@@ -1,8 +1,11 @@
 import requests
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+
+User = get_user_model()
 
 
 class Services(models.Model):
@@ -14,7 +17,12 @@ class Services(models.Model):
     photo = models.ImageField(
         upload_to="services/", blank=True, null=True, help_text="Загрузите нужную фотографию услуги"
     )
-    doctors = models.ForeignKey("Doctors", on_delete=models.CASCADE, verbose_name="Врач")
+    doctors = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Врач",
+        limit_choices_to={"is_doctors": True},  # Ограничиваем выбор только врачами
+    )
 
     def __str__(self):
         return self.name
@@ -160,6 +168,14 @@ class Appointment(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="appointments"
     )
+    doctor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Врач",
+        related_name="doctor_appointments",
+        limit_choices_to={"is_doctors": True},
+        blank=True,
+    )
     service = models.ForeignKey(
         "Services", on_delete=models.CASCADE, verbose_name="Услуга", related_name="appointments"
     )
@@ -193,12 +209,14 @@ class Appointment(models.Model):
             self.status = "cancelled"
             self.save()
 
-    def confirm(self):
-        """Подтверждает запись на прием"""
-
+    def confirm(self, doctor):
         if self.status == "pending":
             self.status = "confirmed"
+            self.confirmed_by = doctor
+            self.confirmation_date = timezone.now()
             self.save()
+            return True
+        return False
 
     def complete(self):
         """Отмечает прием как завершенный"""
@@ -206,6 +224,18 @@ class Appointment(models.Model):
         if self.status == "confirmed":
             self.status = "completed"
             self.save()
+
+    def can_be_confirmed(self):
+        return self.status == "pending"
+
+    def confirm(self, by_doctor=None):
+        if self.can_be_confirmed():
+            self.status = "confirmed"
+            if by_doctor:
+                self.confirmed_by = by_doctor
+            self.save()
+            return True
+        return False
 
 
 class DiagnosticResults(models.Model):
@@ -224,8 +254,15 @@ class DiagnosticResults(models.Model):
         "Services", on_delete=models.CASCADE, related_name="diagnostic_results", verbose_name="Услуга"
     )
 
-    # Врач, который проводил диагностику (может быть из модели Doctors)
-    doctor = models.ForeignKey("Doctors", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Врач")
+    # Врач, который проводил диагностику
+    doctor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Врач",
+        related_name="doctor_diagnostic",
+        limit_choices_to={"is_doctors": True},
+        blank=True,
+    )
 
     # Дата и время проведения диагностики
     date_performed = models.DateTimeField(auto_now_add=True, verbose_name="Дата и время проведения")
@@ -235,6 +272,8 @@ class DiagnosticResults(models.Model):
         upload_to="diagnostic_results/%Y/%m/%d/",
         validators=[FileExtensionValidator(allowed_extensions=["pdf", "jpg", "jpeg", "png", "dicom"])],
         verbose_name="Файл с результатами",
+        blank=True,
+        null=True,
     )
 
     # Заключение врача (текстовое поле)

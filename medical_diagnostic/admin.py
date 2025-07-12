@@ -60,15 +60,10 @@ class ContactsAdmin(admin.ModelAdmin):
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "appointment_date")
-    list_filter = (
-        "user",
-        "appointment_date",
-    )
-    search_fields = (
-        "user",
-        "appointment_date",
-    )
+    list_display = ("id", "user", "doctor", "service", "appointment_date", "status")
+    list_filter = ("status", "doctor", "appointment_date")
+    search_fields = ("user__username", "doctor__username", "service__name")
+    raw_id_fields = ("user", "doctor", "service")
 
 
 @admin.register(DiagnosticResults)

@@ -66,6 +66,7 @@ def logout_view(request):
 class ProfilePageView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "profile.html"
+    context_object_name = "user"
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProfilePageView, self).get_context_data(*args, **kwargs)

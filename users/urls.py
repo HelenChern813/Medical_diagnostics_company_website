@@ -9,7 +9,7 @@ from users.views import (PasswordResetUserView, ProfilePageView, ProfileUpdateVi
 app_name = UsersConfig.name
 
 urlpatterns = [
-    path("login/", LoginView.as_view(template_name="login.html"), name="login"),
+    path("", LoginView.as_view(template_name="login.html"), name="login"),
     path("logout/", logout_view, name="logout"),
     path("register/", RegisterView.as_view(), name="register"),
     path("reset_password/", PasswordResetUserView.as_view(), name="reset_password"),

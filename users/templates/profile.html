@@ -1,25 +1,75 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Мой профиль{% endblock %}
+{% block title %}Профиль пользователя{% endblock %}
 
 {% block content %}
-<div class="row text-center mt-2">
-    <div class="card-header">
-        <h3>Мой профиль</h3>
-    </div>
-    <div class="card-body">
-        {% if object.avatar %}
-            <img src="{{ object.avatar.url }}" class="img-thumbnail mb-3" width="150">
-        {% endif %}
-        <p><strong>Имя:</strong> {{ user.first_name|default:"Не указано" }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card border-success shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="h5 mb-0">Фотография профиля</h3>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
+                         alt="{{ user.get_full_name }}"
+                         class="img-fluid rounded-circle mb-3"
+                         style="width: 200px; height: 200px; object-fit: cover;">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'users:profile_edit' user.pk %}" class="btn btn-success">
+                            <i class="bi bi-pencil me-2"></i>Редактировать профиль
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-md-8">
+            <div class="card border-success shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h4 mb-0">Личные данные</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">ФИО:</div>
+                        <div class="col-md-8">{{ user.last_name }} {{ user.first_name }} {{ user.surname|default:'' }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Email:</div>
+                        <div class="col-md-8">{{ user.email }}</div>
+                    </div>
+                    {% if user.phone_number %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Телефон:</div>
+                        <div class="col-md-8">{{ user.phone_number }}</div>
+                    </div>
+                    {% endif %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Дата регистрации:</div>
+                        <div class="col-md-8">{{ user.date_joined|date:"d.m.Y" }}</div>
+                    </div>
+                </div>
+            </div>
 
-
-        <a href="{% url 'users:profile_edit' object.pk %}" class="btn btn-primary mt-3">
-                        Редактировать профиль
-        </a>
+            {% if user.is_doctor %}
+            <div class="card border-success shadow-sm mt-4">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h4 mb-0">Профессиональная информация</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Специализация:</div>
+                        <div class="col-md-8">{{ user.doctor_profile.specialization }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Опыт работы:</div>
+                        <div class="col-md-8">{{ user.doctor_profile.experience }} лет</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
     </div>
 </div>
-
 {% endblock %}

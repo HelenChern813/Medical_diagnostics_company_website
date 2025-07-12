@@ -1,10 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}{{ service.name }} - Детали услуги{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+
+        <!-- Заголовок страницы -->
+        <h1 class="mb-4">{{ service.name }}</h1>
+
+        <div class="col-lg-8">
+            <!-- Изображение услуги -->
+            {% if service.photo %}
+            <div class="mb-4">
+                <img src="{{ service.photo.url }}" style="max-width: 50%;" alt="{{ service.name }}" class="img-fluid img-thumbnail">
+            </div>
+            {% endif %}
+
+            <!-- Описание услуги -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4 card-title">Описание услуги</h2>
+                    <div class="card-text">{{ service.description|linebreaks }}</div>
+                </div>
+            </div>
+
+            <!-- Врач, выполняющий услугу -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h4 card-title">Специалист</h2>
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <img src="{% if service.doctors.profile.photo %}{{ service.doctors.profile.photo.url }}{% else %}{% static 'img/default_doctor.jpg' %}{% endif %}" 
+                                 alt="{{ service.doctors.get_full_name }}" 
+                                 class="rounded-circle" 
+                                 width="80" 
+                                 height="80">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-1">{{ service.doctors.get_full_name }}</h5>
+                            <p class="mb-1 text-muted">{{ service.doctors.profile.specialization|default:"Специалист" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Блок с ценой и действиями -->
+            <div class="card shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h3 class="h4 card-title">Стоимость услуги</h3>
+                    <div class="display-5 mb-4 text-primary">{{ service.price }} ₽</div>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'medical_diagnostic:appointments_create' %}" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="bi bi-calendar-check me-2"></i>Записаться на прием
+                        </a>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            Для записи на прием необходимо <a href="{% url 'login' %}?next={% url 'services_detail' service.id %}" class="alert-link">войти</a> в систему.
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2">
+                        <a href="tel:+78001234567" class="btn btn-outline-secondary">
+                            <i class="bi bi-telephone me-2"></i>Позвонить для консультации
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Дополнительная информация -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="h4 card-title">Дополнительная информация (в разработке)</h3>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-0">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-clock text-primary fs-1 mb-3"></i>
+                                    <h4 class="h5">Время приема</h4>
+                                    <p class="text-muted">Обычно 30-60 минут в зависимости от сложности</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-0">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-medical text-primary fs-1 mb-3"></i>
+                                    <h4 class="h5">Подготовка</h4>
+                                    <p class="text-muted">Специальная подготовка обычно не требуется</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-0">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-credit-card text-primary fs-1 mb-3"></i>
+                                    <h4 class="h5">Оплата</h4>
+                                    <p class="text-muted">Наличными или картой после приема</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

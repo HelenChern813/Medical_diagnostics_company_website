@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 
 {% block title %}Главная страница{% endblock %}
+
+{% get_content as my_content %}
 
 {% block content %}
 <div class="row">
@@ -16,14 +19,12 @@
     <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
       <h4 id="list-item-1">Описание компании</h4>
       <p>
-        <ul>
-        {% for content in get_content %}
+        {% for content in my_content %}
+          <h3>123</h3>
           {% if content.name_content == 'Описание компании' %}
-            <p>{{ content.text_content }}</p>
+            <h5>{{ content.text_content }}</h5>
           {% endif %}
         {% endfor %}
-        </ul>
-
       </p>
       <h4 id="list-item-2">Перечень предоставляемых услуг</h4>
       <p>

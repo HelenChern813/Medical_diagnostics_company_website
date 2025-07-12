@@ -7,6 +7,7 @@ register = template.Library()
 
 @register.simple_tag
 def get_content():
+
     return Content.objects.all()
 
 

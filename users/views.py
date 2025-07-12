@@ -4,12 +4,12 @@ from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetView
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from django.core.exceptions import PermissionDenied
 
 from users.forms import CustomUserCreationForm, ProfileForm
 from users.models import User

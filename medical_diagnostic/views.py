@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AppointmentForm, FeedbackForm
-from .models import Appointment, Contacts, DiagnosticResults, Services, Doctors
+from .models import Appointment, Contacts, DiagnosticResults, Doctors, Services
 
 
 class AppointmentListView(LoginRequiredMixin, ListView):

@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 title: '{{ appointment.service.name }} - {{ appointment.service.doctor.full_name }}',
                 start: '{{ appointment.appointment_date|date:"Y-m-d\TH:i:s" }}',
-                url: '{% url "appointments:detail" appointment.pk %}',
+                url: '{% url "medical_diagnostic:appointment_detail" appointment.pk %}',
                 color: '{% if appointment.status == "confirmed" %}#28a745{% elif appointment.status == "pending" %}#ffc107{% elif appointment.status == "cancelled" %}#6c757d{% else %}#17a2b8{% endif %}'
             },
             {% endfor %}

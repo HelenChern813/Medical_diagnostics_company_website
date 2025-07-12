@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .forms import AppointmentForm, FeedbackForm
-from .models import Appointment, Contacts, DiagnosticResults, Services
+from .models import Appointment, Contacts, DiagnosticResults, Services, Doctors
 
 
 class AppointmentListView(LoginRequiredMixin, ListView):
@@ -225,3 +225,9 @@ class ConfirmAppointmentView(DoctorRequiredMixin, View):
             messages.error(request, "Не удалось подтвердить запись")
 
         return redirect("medical_diagnostic:doctor_appointments")
+
+
+class DoctorsDetailView(LoginRequiredMixin, DetailView):
+    model = Doctors
+    template_name = "doctors_detail.html"
+    context_object_name = "doctors"

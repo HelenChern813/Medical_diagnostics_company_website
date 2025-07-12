@@ -1,61 +1,111 @@
 {% extends 'base.html' %}
-
 {% load custom_tags %}
 
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-
 {% get_content as my_content %}
 {% get_services as my_services %}
 {% get_contacts as my_contact %}
 
 
 <div class="row">
-  <div class="col-4">
-    <div id="list-example" class="list-group">
-      <a class="list-group-item list-group-item-action" href="#list-item-1">Описание компании</a>
-      <a class="list-group-item list-group-item-action" href="#list-item-2">Перечень предоставляемых услуг</a>
-      <a class="list-group-item list-group-item-action" href="#list-item-3">Контактная информация</a>
-      <a class="list-group-item list-group-item-action" href="#list-item-4">Форма для обратной связи</a>
+  <div class="col-md-4">
+    <div class="card border-success mb-4 shadow-sm">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Навигация</h5>
+      </div>
+      <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-1">
+          <i class="bi bi-building me-2 text-success"></i> Описание компании
+        </a>
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-2">
+          <i class="bi bi-heart-pulse me-2 text-success"></i> Наши услуги
+        </a>
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-3">
+          <i class="bi bi-telephone me-2 text-success"></i> Контакты
+        </a>
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-4">
+          <i class="bi bi-chat-dots me-2 text-success"></i> Обратная связь
+        </a>
+      </div>
     </div>
   </div>
-  <div class="col-8">
-    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
-      <h4 id="list-item-1">Описание компании</h4>
-      <p>
-        {% for content in my_content %}
-          {% if content.name_content == 'Описание компании' %}
-            <h5>{{ content.text_content }}</h5>
-          {% endif %}
-        {% endfor %}
-      </p>
-      <h4 id="list-item-2">Перечень предоставляемых услуг</h4>
-      <p>
-        <ul class="list-group list-group-flush">
-          {% for services in my_services %}
-            <li class="list-group-item">{{ services.name }}</li>
-          {% endfor %}
-        </ul>
-      </p>
 
-      <h4 id="list-item-3">Контактная информация</h4>
-      <p>
-        <ul>
-        {% for contacts in my_contact %}
-          <p>{{ contacts.name }}</p>
-          <p>{{ contacts.address }}</p>
-          <p>{{ contacts.phone_company }}</p>
-          <p>{{ contacts.head_physician }}</p>
-          <p>{{ contacts.email_company }}</p>
-        {% endfor %}
-        </ul>
-      </p>
-      <h4 id="list-item-4">Форма для обратной связи</h4>
-      <p>Если у вас остались вопросы / комментарии, которые Вы бы хотели с нами обсудить или передать, то пожалуйста, заполните
-        <a href="{% url 'medical_diagnostic:feedback' %}" class="link-primary">Форму обратной связи</a>
-        Мы рады быть на связи и становиться лучше для Вас!
-      </p>
+  <div class="col-md-8">
+    <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+      <div class="card mb-4 border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-1" class="mb-0">Описание компании</h4>
+        </div>
+        <div class="card-body">
+          {% for content in my_content %}
+            {% if content.name_content == 'Описание компании' %}
+              <div class="lead">{{ content.text_content }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card mb-4 border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-2">Наши услуги</h4>
+        </div>
+        <div class="card-body">
+          <div class="list-group">
+            {% for service in my_services %}
+              <a href="{% url 'medical_diagnostic:service_detail' service.pk %}"
+                 class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                {{ service.name }}
+                <span class="badge bg-success rounded-pill">{{ service.price }} ₽</span>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4 border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-3">Контактная информация</h4>
+        </div>
+        <div class="card-body">
+          {% for contacts in my_contact %}
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-building me-2 text-success"></i>
+                <div>
+                  <strong>{{ contacts.name }}</strong><br>
+                  {{ contacts.address }}
+                </div>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-telephone me-2 text-success"></i>
+                {{ contacts.phone_company }}
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-person-badge me-2 text-success"></i>
+                Главный врач: {{ contacts.head_physician }}
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-envelope me-2 text-success"></i>
+                {{ contacts.email_company }}
+              </li>
+            </ul>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-4">Обратная связь</h4>
+        </div>
+        <div class="card-body">
+          <p class="lead">Если у вас остались вопросы или комментарии, пожалуйста, заполните форму обратной связи.</p>
+          <a href="{% url 'medical_diagnostic:feedback' %}" class="btn btn-success">
+            <i class="bi bi-chat-dots me-2"></i>Перейти к форме
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

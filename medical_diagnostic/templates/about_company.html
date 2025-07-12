@@ -1,64 +1,111 @@
 {% extends 'base.html' %}
-
 {% load custom_tags %}
+{% load static %}
 
 {% block title %}О компании{% endblock %}
 
 {% block content %}
-
 {% get_content as contents %}
 {% get_doctors as doctors %}
 
+
 <div class="row">
-  <div class="col-4">
-    <div id="list-example" class="list-group">
-      <a class="list-group-item list-group-item-action" href="#list-item-1">История компании</a>
-      <a class="list-group-item list-group-item-action" href="#list-item-2">Миссия</a>
-      <a class="list-group-item list-group-item-action" href="#list-item-3">Ценности</a>
-      <a class="list-group-item list-group-item-action" href="#list-item-4">Команда врачей</a>
+  <div class="col-md-4">
+    <div class="card border-success mb-4 shadow-sm">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">О компании</h5>
+      </div>
+      <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-1">
+          <i class="bi bi-clock-history me-2 text-success"></i> История
+        </a>
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-2">
+          <i class="bi bi-stars me-2 text-success"></i> Миссия
+        </a>
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-3">
+          <i class="bi bi-heart me-2 text-success"></i> Ценности
+        </a>
+        <a class="list-group-item list-group-item-action d-flex align-items-center" href="#list-item-4">
+          <i class="bi bi-people me-2 text-success"></i> Наша команда
+        </a>
+      </div>
     </div>
   </div>
-  <div class="col-8">
+
+  <div class="col-md-8">
     <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
-      <h4 id="list-item-1">История компании</h4>
-      <p>
-        <ul>
-        {% for content in contents %}
-          {% if content.name_content == 'История компании' %}
-            <p>{{ content.text_content }}</p>
-          {% endif %}
-        {% endfor %}
-        </ul>
+      <div class="card mb-4 border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-1">История компании</h4>
+        </div>
+        <div class="card-body">
+          {% for content in contents %}
+            {% if content.name_content == 'История компании' %}
+              <div class="lead">{{ content.text_content }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
 
-      </p>
-      <h4 id="list-item-2">Миссия</h4>
-      <p>
-        <ul>
-        {% for content in contents %}
-          {% if content.name_content == 'Миссия' %}
-            <p>{{ content.text_content }}</p>
-          {% endif %}
-        {% endfor %}
-        </ul>
-      </p>
+      <div class="card mb-4 border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-2">Миссия</h4>
+        </div>
+        <div class="card-body">
+          {% for content in contents %}
+            {% if content.name_content == 'Миссия' %}
+              <div class="lead">{{ content.text_content }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
 
-      <h4 id="list-item-3">Ценности</h4>
-      <p>
-        <ul>
-        {% for content in contents %}
-          {% if content.name_content == 'Ценности' %}
-            <p>{{ content.text_content }}</p>
-          {% endif %}
-        {% endfor %}
-        </ul>
-      </p>
-      <h4 id="list-item-4">Команда врачей</h4>
-      <p>
-        {% for doctor in doctors %}
-          <p>{{ doctor.full_name }}</p>
-          <p>{{ doctor.photo_doctor }}</p>
-        {% endfor %}
-      </p>
+      <div class="card mb-4 border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-3">Ценности</h4>
+        </div>
+        <div class="card-body">
+          {% for content in contents %}
+            {% if content.name_content == 'Ценности' %}
+              <div class="lead">{{ content.text_content }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card border-success shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 id="list-item-4">Наша команда</h4>
+        </div>
+        <div class="card-body">
+          <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for doctor in doctors %}
+            <div class="col">
+              <div class="card h-100 border-success">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                      <img src="{% if doctor.photo_doctor %}{{ doctor.photo_doctor.url }}{% else %}{% static 'img/default_doctor.jpg' %}{% endif %}"
+                           class="rounded-circle me-3"
+                           width="80"
+                           height="80"
+                           alt="{{ doctor.full_name }}">
+                    </div>
+                    <div class="flex-grow-1">
+                      <h5 class="mb-1">{{ doctor.full_name }}</h5>
+                      <p class="mb-1 text-muted">{{ doctor.specialization|default:"Специалист" }}</p>
+                      <a href="{% url 'medical_diagnostic:doctor_detail' doctor.pk %}" class="btn btn-sm btn-outline-success mt-2">
+                        Подробнее
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

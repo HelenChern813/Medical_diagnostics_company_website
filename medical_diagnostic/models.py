@@ -68,6 +68,9 @@ class Doctors(models.Model):
     comment = models.TextField(verbose_name="Текст описания о враче", blank=True, null=True, help_text="Введите текст")
     specialization = models.CharField(max_length=255, verbose_name="Специализация")
     experience = models.PositiveIntegerField(default=0, verbose_name="Опыт работы (лет)")
+    education = models.TextField(verbose_name="Образовательное учреждение", blank=True, null=True, help_text="Введите название образовательного учреждения")
+    qualification = models.TextField(verbose_name="Курсы квалификации", blank=True, null=True, help_text="Введите названия курсов квалификации")
+    schedule = models.CharField(max_length=255, verbose_name="Расписание", help_text="Пример: Пн-Пт 9:00-18:00, Сб 10:00-15:00", blank=True)
 
     def __str__(self):
         return f"{self.last_name} {self.first_name} {self.surname}"

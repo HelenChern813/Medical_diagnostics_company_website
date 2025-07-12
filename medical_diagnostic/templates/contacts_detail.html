@@ -17,6 +17,10 @@
             <li class="list-group-item"><i class="bi bi-envelope"></i> Электронная почта - {{ contact.email_company }}</li>
               <li class="list-group-item"><i class="bi bi-envelope"></i> ФИО главврача компании - {{ contact.head_physician }}</li>
               <li class="list-group-item"><i class="bi bi-geo-alt"></i> Юридическое лицо представляющее компанию - {{ contact.legal_entity }}</li>
+            <li class="list-group-item"><i class="bi bi-geo-alt"></i>
+              <a class="link" href="{% url 'medical_diagnostic:directions_map' %}">Карта проезда к компании
+              </a>
+            </li>
           </ul>
         </div>
       </div>

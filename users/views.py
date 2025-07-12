@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
+from django.core.exceptions import PermissionDenied
 
 from users.forms import CustomUserCreationForm, ProfileForm
 from users.models import User
@@ -73,6 +74,13 @@ class ProfilePageView(LoginRequiredMixin, DetailView):
         page_user = get_object_or_404(User, id=self.kwargs["pk"])
         context["page_user"] = page_user
         return context
+
+
+class OwnerRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object() != request.user and not request.user.is_staff:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):

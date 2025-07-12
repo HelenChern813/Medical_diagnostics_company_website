@@ -1,13 +1,23 @@
 from django.contrib import admin
-
+from django.contrib.auth.admin import UserAdmin
 from .models import User
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "email",
+class CustomUserAdmin(UserAdmin):
+    list_display = ('email', 'first_name', 'last_name', 'is_doctors', 'is_active', 'date_joined')
+    list_filter = ('is_doctors', 'is_active')
+    search_fields = ('email', 'first_name', 'last_name')
+    ordering = ('-date_joined',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Персональная информация', {'fields': ('first_name', 'last_name', 'surname', 'phone_number', 'avatar')}),
+        ('Права доступа', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_doctors', 'groups', 'user_permissions')}),
+        ('Важные даты', {'fields': ('last_login', 'date_joined')}),
     )
-    list_filter = ("id", "email")
-    search_fields = ("email",)
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2'),
+        }),
+    )

@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 from users.models import User
 
@@ -57,3 +58,15 @@ class ProfileForm(forms.ModelForm):
         if phone_number and not phone_number.isdigit():
             raise forms.ValidationError("Номер телефона должен содержать только цифры.")
         return phone_number
+
+
+class EmailAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'autofocus': True}))
+
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise forms.ValidationError(
+                "Аккаунт не активирован. Проверьте вашу почту для подтверждения.",
+                code='inactive',
+            )
+        super().confirm_login_allowed(user)

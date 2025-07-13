@@ -15,6 +15,7 @@ class User(AbstractUser):
         default=False,
         verbose_name="Аккаунт врача",
         help_text="Является ли пользователь врачем",
+        blank=True, null=True
     )
     first_name = models.CharField(max_length=100, verbose_name="Имя", help_text="Введите имя", blank=True, null=True)
     last_name = models.CharField(

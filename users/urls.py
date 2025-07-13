@@ -3,13 +3,22 @@ from django.contrib.auth.views import (LoginView, PasswordResetCompleteView, Pas
 from django.urls import path, reverse_lazy
 
 from users.apps import UsersConfig
+from users.forms import EmailAuthenticationForm
 from users.views import (PasswordResetUserView, ProfilePageView, ProfileUpdateView, RegisterView, email_verification,
                          logout_view)
 
 app_name = UsersConfig.name
 
 urlpatterns = [
-    path("", LoginView.as_view(template_name="login.html"), name="login"),
+    path("",
+         LoginView.as_view(
+             template_name="login.html",
+             form_class=EmailAuthenticationForm,
+             authentication_form=EmailAuthenticationForm,
+             redirect_authenticated_user=True,
+             extra_context={'title': 'Авторизация'}
+         ),
+         name="login"),
     path("logout/", logout_view, name="logout"),
     path("register/", RegisterView.as_view(), name="register"),
     path("reset_password/", PasswordResetUserView.as_view(), name="reset_password"),

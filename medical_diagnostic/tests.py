@@ -2,12 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from medical_diagnostic.models import (
-    Services,
-    Appointment,
-    DiagnosticResults,
-    Feedback,
-)
+from medical_diagnostic.models import Appointment, DiagnosticResults, Feedback, Services
 from users.models import User
 
 

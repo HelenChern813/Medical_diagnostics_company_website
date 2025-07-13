@@ -12,10 +12,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     token = models.CharField(max_length=100, blank=True, null=True, verbose_name="Токен")
     is_doctors = models.BooleanField(
-        default=False,
-        verbose_name="Аккаунт врача",
-        help_text="Является ли пользователь врачем",
-        blank=True, null=True
+        default=False, verbose_name="Аккаунт врача", help_text="Является ли пользователь врачем", blank=True, null=True
     )
     first_name = models.CharField(max_length=100, verbose_name="Имя", help_text="Введите имя", blank=True, null=True)
     last_name = models.CharField(

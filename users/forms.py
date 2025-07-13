@@ -1,6 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from users.models import User
 
@@ -61,12 +60,12 @@ class ProfileForm(forms.ModelForm):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'autofocus': True}))
+    username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={"autofocus": True}))
 
     def confirm_login_allowed(self, user):
         if not user.is_active:
             raise forms.ValidationError(
                 "Аккаунт не активирован. Проверьте вашу почту для подтверждения.",
-                code='inactive',
+                code="inactive",
             )
         super().confirm_login_allowed(user)

@@ -12,6 +12,10 @@ python-dotenv = "^1.1.1"
 psycopg2-binary = "^2.9.10"
 pillow = "^11.3.0"
 requests = "^2.32.4"
+djangorestframework = "^3.16.0"
+djangorestframework-simplejwt = "^5.5.0"
+drf-yasg = "^1.21.10"
+coverage = "^7.9.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"

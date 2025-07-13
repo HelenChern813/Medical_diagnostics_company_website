@@ -3,7 +3,6 @@ from django.contrib.auth.views import (LoginView, PasswordResetCompleteView, Pas
 from django.urls import path, reverse_lazy
 
 from users.apps import UsersConfig
-from users.forms import EmailAuthenticationForm
 from users.views import (PasswordResetUserView, ProfilePageView, ProfileUpdateView, RegisterView, email_verification,
                          logout_view)
 
@@ -13,11 +12,7 @@ urlpatterns = [
     path(
         "",
         LoginView.as_view(
-            template_name="login.html",
-            form_class=EmailAuthenticationForm,
-            authentication_form=EmailAuthenticationForm,
-            redirect_authenticated_user=True,
-            extra_context={"title": "Авторизация"},
+            template_name="login.html"
         ),
         name="login",
     ),

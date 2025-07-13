@@ -1,9 +1,9 @@
-# 🏥 Медицинский диагностический центр - Django проект
+# 🏥 Сайт компании медицинской диагностики- Django проект
 
-![Django](https://img.shields.io/badge/Django-4.2-green)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue)
-![Python](https://img.shields.io/badge/Python-3.8%2B-yellow)
-![Poetry](https://img.shields.io/badge/Poetry-1.5%252B-orange )
+![Django](https://img.shields.io/badge/Django-5.2.4-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17+-blue)
+![Python](https://img.shields.io/badge/Python-3.12%2B-yellow)
+![Poetry](https://img.shields.io/badge/Poetry--orange )
 ## 📋 Описание проекта
 
 Веб-приложение для медицинского диагностического центра с полным циклом работы:

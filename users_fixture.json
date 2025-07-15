@@ -1,0 +1,90 @@
+[
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "last_login": "2025-07-15T06:18:12.007Z",
+        "is_superuser": true,
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-10T17:43:14Z",
+        "email": "admin@exemple.com",
+        "password": "pbkdf2_sha256$1000000$0flFu6qC4VKmhmloziJWzM$PLY4sROPpWafpAheg/g/ey7+FfGXkiKh1Wzs6LgSrSQ=",
+        "phone_number": "902",
+        "avatar": "",
+        "token": null,
+        "is_doctors": true,
+        "first_name": "Александр",
+        "last_name": "Александров",
+        "surname": "Андреевна",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+        "last_login": "2025-07-12T13:54:16Z",
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-12T13:53:25Z",
+        "email": "elench813@gmail.com",
+        "password": "pbkdf2_sha256$1000000$efW3cjf0Nr8zHnP1CNMqDK$aum9y8WLspJCwqWcM+qOaFGw6TrjLc/w7fCdfTZ5XkY=",
+        "phone_number": "9270294606",
+        "avatar": "avatars/7039505418.jpg",
+        "token": "090eadd999c86f57cb55a35dcfa10c3b",
+        "is_doctors": true,
+        "first_name": "Петр",
+        "last_name": "Петров",
+        "surname": "Петрович",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+        "last_login": "2025-07-13T11:02:16Z",
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-12T15:08:22Z",
+        "email": "chernotalova.e@yandex.ru",
+        "password": "pbkdf2_sha256$1000000$vDAT9yQCZbKu9fI7XyGNPt$Em6d+TTTpGxHpdA7upAQ68R9juy/VL+/GbtQEg4gHXg=",
+        "phone_number": "9024113249",
+        "avatar": "",
+        "token": "77046978156091e772ddf9c9e6de3b06",
+        "is_doctors": true,
+        "first_name": "Елена",
+        "last_name": "Еленовна",
+        "surname": "Елина",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+        "last_login": "2025-07-15T06:15:59.209Z",
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-15T06:15:43.385Z",
+        "email": "chernprogram@yandex.ru",
+        "password": "pbkdf2_sha256$1000000$MlLcfqYvSxAd7EW5xXvfLb$ujk+RwlzILlWkVHhHdVu50vJ1F2RxsyBeDZftq03uUo=",
+        "phone_number": "9024113249",
+        "avatar": "avatars/IMG_4427.JPG",
+        "token": "b5d83547d534f89da277c650bc2dff0b",
+        "is_doctors": false,
+        "first_name": "Ирина",
+        "last_name": "Заречнова",
+        "surname": null,
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]

@@ -29,13 +29,6 @@
                         <i class="bi bi-person-circle me-1"></i>Личный кабинет
                     </a>
                 </li>
-                {% if user.doctor_profile %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'medical_diagnostic:doctor_appointments' %}">
-                        <i class="bi bi-calendar-check me-1"></i>Записи
-                    </a>
-                </li>
-                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'users:logout' %}">
                         <i class="bi bi-box-arrow-right me-1"></i>Выйти

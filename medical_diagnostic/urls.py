@@ -13,7 +13,6 @@ urlpatterns = [
     path("appointment/<int:pk>/", views.AppointmentDetailView.as_view(), name="appointment_detail"),
     path("appointment_update/<int:pk>/", views.AppointmentUpdateView.as_view(), name="appointment_update"),
     path("appointment_cancel/<int:pk>/", views.AppointmentCancelView.as_view(), name="appointment_cancel"),
-    path("calendar/", views.appointment_calendar_view, name="calendar"),
     path("services_list/", views.ServicesListView.as_view(), name="services_list"),
     path("services/<int:pk>/", views.ServicesDetailView.as_view(), name="service_detail"),
     path("contact/", views.ContactsListView.as_view(), name="contact_detail"),

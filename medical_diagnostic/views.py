@@ -86,20 +86,6 @@ class AppointmentCancelView(LoginRequiredMixin, View):
         return redirect("medical_diagnostic:appointments_list")
 
 
-def appointment_calendar_view(request):
-    """Календарь записей (для врачей и пациентов)"""
-
-    appointments = Appointment.objects.filter(user=request.user, appointment_date__gte=timezone.now())
-
-    return render(
-        request,
-        "calendar.html",
-        {
-            "appointments": appointments,
-        },
-    )
-
-
 class ServicesListView(LoginRequiredMixin, ListView):
     model = Services
     template_name = "services_list.html"

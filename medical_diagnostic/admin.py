@@ -34,17 +34,12 @@ class FeedbackAdmin(admin.ModelAdmin):
 
 @admin.register(Services)
 class ServicesAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "doctor_info", "photo_preview")
+    list_display = ("name", "price", "photo_preview")
     list_filter = ("doctors",)
-    search_fields = ("name", "description", "doctors__last_name")
+    search_fields = ("name", "description")
     list_per_page = 20
     raw_id_fields = ("doctors",)
     autocomplete_fields = ["doctors"]
-
-    def doctor_info(self, obj):
-        return f"{obj.doctors.last_name} {obj.doctors.first_name}"
-
-    doctor_info.short_description = "Врач"
 
     def photo_preview(self, obj):
         if obj.photo:

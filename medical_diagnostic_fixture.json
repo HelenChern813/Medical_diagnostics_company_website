@@ -7,7 +7,7 @@
         "description": "Осуществляется забор крови из вены путем прокалывания верхних слоев кожи",
         "price": 500,
         "photo": "services/846ef001-f332-11ea-bbc9-00505685528e_e9e67b48-7109-11eb-8403-f8bc124a459d.resize.jpg",
-        "doctors": 1
+        "doctors": 2
     }
 },
 {
@@ -18,7 +18,7 @@
         "description": "УЗИ внутренних органов — безопасный и безболезненный метод диагностики, позволяющий оценить состояние печени, желчного пузыря, поджелудочной железы и селезенки в режиме реального времени. Процедура занимает 20-30 минут и помогает выявить патологии на ранних стадиях.",
         "price": 2500,
         "photo": "services/Sonoscape-S20-Medical-Ultrasound-System-Digital-Trolley-Color-3D-4D-Doppler-Ult_Xm9zNHZ.jpg",
-        "doctors": 1
+        "doctors": null
     }
 },
 {
@@ -29,7 +29,7 @@
         "description": "Первичная консультация — это первый визит пациента к медицинскому специалисту для диагностики и решения проблем со здоровьем, острых состояний или обострения хронических заболеваний.",
         "price": 3500,
         "photo": "services/88701842.jpg",
-        "doctors": 1
+        "doctors": null
     }
 },
 {
@@ -150,114 +150,58 @@
 },
 {
     "model": "medical_diagnostic.appointment",
-    "pk": 1,
+    "pk": 12,
     "fields": {
-        "user": 1,
-        "doctor": 2,
+        "user": 4,
+        "doctor": null,
         "service": 1,
-        "appointment_date": "2025-07-14T07:39:01Z",
-        "status": "cancelled",
-        "notes": "Первая запись на прием",
-        "created_at": "2025-07-12T07:39:18.987Z",
-        "updated_at": "2025-07-12T10:44:09.253Z"
+        "appointment_date": "2025-07-22T19:16:57Z",
+        "status": "pending",
+        "notes": "",
+        "created_at": "2025-07-16T19:19:00.669Z",
+        "updated_at": "2025-07-16T19:19:00.669Z"
     }
 },
 {
     "model": "medical_diagnostic.appointment",
-    "pk": 2,
+    "pk": 13,
     "fields": {
-        "user": 2,
-        "doctor": 2,
-        "service": 1,
-        "appointment_date": "2025-07-21T15:55:00Z",
-        "status": "completed",
-        "notes": "кус кукус",
-        "created_at": "2025-07-12T13:56:02.908Z",
-        "updated_at": "2025-07-13T11:20:17.609Z"
-    }
-},
-{
-    "model": "medical_diagnostic.appointment",
-    "pk": 3,
-    "fields": {
-        "user": 2,
+        "user": 4,
         "doctor": 1,
-        "service": 1,
-        "appointment_date": "2025-07-14T18:17:04Z",
+        "service": 2,
+        "appointment_date": "2025-07-17T19:20:03Z",
         "status": "confirmed",
         "notes": "",
-        "created_at": "2025-07-12T18:17:07.518Z",
-        "updated_at": "2025-07-12T18:29:30.075Z"
+        "created_at": "2025-07-16T19:20:17.758Z",
+        "updated_at": "2025-07-16T19:23:15.136Z"
     }
 },
 {
     "model": "medical_diagnostic.appointment",
-    "pk": 4,
-    "fields": {
-        "user": 1,
-        "doctor": 1,
-        "service": 2,
-        "appointment_date": "2025-07-22T12:57:00Z",
-        "status": "pending",
-        "notes": "153",
-        "created_at": "2025-07-12T18:55:05.836Z",
-        "updated_at": "2025-07-12T18:55:05.836Z"
-    }
-},
-{
-    "model": "medical_diagnostic.appointment",
-    "pk": 5,
-    "fields": {
-        "user": 1,
-        "doctor": 2,
-        "service": 2,
-        "appointment_date": "2025-07-25T09:00:00Z",
-        "status": "pending",
-        "notes": "",
-        "created_at": "2025-07-12T21:51:56.184Z",
-        "updated_at": "2025-07-12T21:51:56.184Z"
-    }
-},
-{
-    "model": "medical_diagnostic.appointment",
-    "pk": 6,
-    "fields": {
-        "user": 1,
-        "doctor": 3,
-        "service": 2,
-        "appointment_date": "2025-07-30T16:30:00Z",
-        "status": "pending",
-        "notes": "",
-        "created_at": "2025-07-13T11:30:18.189Z",
-        "updated_at": "2025-07-13T11:30:18.189Z"
-    }
-},
-{
-    "model": "medical_diagnostic.appointment",
-    "pk": 7,
+    "pk": 14,
     "fields": {
         "user": 4,
         "doctor": 3,
-        "service": 1,
-        "appointment_date": "2025-07-21T11:26:00Z",
-        "status": "pending",
-        "notes": "ку кукусь",
-        "created_at": "2025-07-15T06:17:34.148Z",
-        "updated_at": "2025-07-15T06:17:34.148Z"
+        "service": 2,
+        "appointment_date": "2025-07-30T19:20:48Z",
+        "status": "confirmed",
+        "notes": "",
+        "created_at": "2025-07-16T19:20:51.946Z",
+        "updated_at": "2025-07-16T19:21:51.903Z"
     }
 },
 {
     "model": "medical_diagnostic.appointment",
-    "pk": 8,
+    "pk": 15,
     "fields": {
         "user": 4,
-        "doctor": 2,
+        "doctor": null,
         "service": 3,
-        "appointment_date": "2025-07-22T06:22:22Z",
-        "status": "confirmed",
-        "notes": "подтвержденная запись врачом",
-        "created_at": "2025-07-15T06:22:48.055Z",
-        "updated_at": "2025-07-15T06:22:48.055Z"
+        "appointment_date": "2025-07-27T19:21:16Z",
+        "status": "pending",
+        "notes": "",
+        "created_at": "2025-07-16T19:21:18.398Z",
+        "updated_at": "2025-07-16T19:21:18.398Z"
     }
 },
 {
@@ -308,6 +252,18 @@
         "message": "Обработанная заявка",
         "created_at": "2025-07-15T06:23:33.119Z",
         "is_processed": true
+    }
+},
+{
+    "model": "medical_diagnostic.feedback",
+    "pk": 3,
+    "fields": {
+        "name": "Коля",
+        "email": "elench813@gmail.com",
+        "phone": "9270294606",
+        "message": "Коля смотри",
+        "created_at": "2025-07-15T12:07:29.162Z",
+        "is_processed": false
     }
 }
 ]

@@ -27,6 +27,5 @@ urlpatterns = [
         name="diagnostic_results_detail",
     ),
     path("doctor/appointments/", views.DoctorAppointmentListView.as_view(), name="doctor_appointments"),
-    path("doctor/appointments/<int:pk>/confirm/", views.ConfirmAppointmentView.as_view(), name="confirm_appointment"),
     path("doctor_detail/<int:pk>/", views.DoctorsDetailView.as_view(), name="doctor_detail"),
 ]

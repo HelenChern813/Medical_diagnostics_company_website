@@ -21,7 +21,9 @@ class Services(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name="Врач",
-        limit_choices_to={"is_doctors": True},  # Ограничиваем выбор только врачами
+        limit_choices_to={"is_doctors": True},
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
@@ -187,6 +189,7 @@ class Appointment(models.Model):
         related_name="doctor_appointments",
         limit_choices_to={"is_doctors": True},
         blank=True,
+        null=True,
     )
     service = models.ForeignKey(
         "Services", on_delete=models.CASCADE, verbose_name="Услуга", related_name="appointments"
@@ -240,11 +243,10 @@ class Appointment(models.Model):
     def can_be_confirmed(self):
         return self.status == "pending"
 
-    def confirm(self, by_doctor=None):
-        if self.can_be_confirmed():
-            self.status = "confirmed"
-            if by_doctor:
-                self.confirmed_by = by_doctor
+    def assign_doctor(self, doctor):
+        """Назначение врача на запись"""
+        if doctor.is_doctors:
+            self.doctor = doctor
             self.save()
             return True
         return False

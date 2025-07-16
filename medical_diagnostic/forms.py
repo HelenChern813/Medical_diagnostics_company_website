@@ -8,13 +8,10 @@ User = get_user_model()
 
 
 class AppointmentForm(forms.ModelForm):
-    doctor = forms.ModelChoiceField(
-        queryset=User.objects.filter(is_doctors=True), to_field_name="last_name", label="Врач", required=True
-    )
 
     class Meta:
         model = Appointment
-        fields = ["doctor", "service", "appointment_date", "notes"]
+        fields = ["service", "appointment_date", "notes"]
         widgets = {
             "appointment_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
             "notes": forms.Textarea(attrs={"rows": 3}),

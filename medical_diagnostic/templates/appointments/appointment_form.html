@@ -13,15 +13,13 @@
                 <form method="post">
                     {% csrf_token %}
 
-                    <div class="mb-3">
-                        <label for="{{ form.doctor.id_for_label }}" class="form-label">Врач</label>
-                        {{ form.doctor }}
-                        {% if form.doctor.errors %}
-                            <div class="invalid-feedback d-block">
-                                {{ form.doctor.errors }}
-                            </div>
-                        {% endif %}
-                    </div>
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
                     <div class="mb-3">
                         <label for="{{ form.service.id_for_label }}" class="form-label">Услуга</label>
@@ -57,22 +55,4 @@
         </div>
     </div>
 </div>
-
-{% block scripts %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const doctorSelect = document.getElementById('{{ form.doctor.id_for_label }}');
-    const serviceSelect = document.getElementById('{{ form.service.id_for_label }}');
-
-    // Инициализация при загрузке
-    if (doctorSelect.value) {
-        updateServices(doctorSelect.value);
-    }
-
-    doctorSelect.addEventListener('change', function() {
-        updateServices(this.value);
-    });
-});
-</script>
-{% endblock %}
 {% endblock %}

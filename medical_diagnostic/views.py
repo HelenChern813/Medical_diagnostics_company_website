@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -163,19 +164,10 @@ class DoctorRequiredMixin(UserPassesTestMixin):
         return self.request.user.is_authenticated and self.request.user.is_doctors
 
 
-class DoctorAppointmentConfirmView(LoginRequiredMixin, View):
-    """Подтверждение записи врачом"""
-
-    def post(self, request, pk):
-        appointment = get_object_or_404(Appointment, pk=pk, service__doctor=request.user)
-
-        if appointment.status == "pending":
-            appointment.confirm()
-            messages.success(request, "Запись подтверждена!")
-        else:
-            messages.warning(request, "Нельзя подтвердить запись с текущим статусом!")
-
-        return redirect("appointments:doctor-list")
+class DoctorsDetailView(LoginRequiredMixin, DetailView):
+    model = Doctors
+    template_name = "doctors_detail.html"
+    context_object_name = "doctors"
 
 
 class DoctorAppointmentListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
@@ -187,33 +179,36 @@ class DoctorAppointmentListView(LoginRequiredMixin, UserPassesTestMixin, ListVie
         return self.request.user.is_doctors
 
     def get_queryset(self):
-        return Appointment.objects.filter(doctor=self.request.user).order_by("-appointment_date")
+        # Показываем записи без врача или где текущий врач назначен
+        return Appointment.objects.filter(Q(doctor=None) | Q(doctor=self.request.user)).order_by("-appointment_date")
 
+    def post(self, request, *args, **kwargs):
+        """Обработка POST-запроса для назначения врача и подтверждения записи"""
 
-class ConfirmAppointmentView(DoctorRequiredMixin, View):
-    def post(self, request, pk):
-        appointment = get_object_or_404(
-            Appointment,
-            pk=pk,
-        )
-        if appointment.confirm(request.user):
-            messages.success(request, "Запись успешно подтверждена")
+        appointment_id = request.POST.get("appointment_id")
+        if not appointment_id:
+            messages.error(request, "Не указана запись для подтверждения")
+            return redirect("medical_diagnostic:doctor_appointments")
 
-            # Отправка уведомления пациенту
+        appointment = get_object_or_404(Appointment, pk=appointment_id)
+
+        # Назначаем врача и подтверждаем запись
+        if appointment.doctor is None:
+            appointment.doctor = request.user
+            appointment.status = "confirmed"  # Автоматически подтверждаем
+            appointment.save()
+
+            # Отправляем уведомление пациенту
             send_mail(
                 "Ваша запись подтверждена",
-                f'Доктор {request.user.get_full_name()} подтвердил вашу запись на {appointment.appointment_date.strftime("%d.%m.%Y в %H:%M")}',
+                f"Доктор {request.user.get_full_name()} подтвердил вашу запись "
+                f'на {appointment.appointment_date.strftime("%d.%m.%Y в %H:%M")}',
                 settings.DEFAULT_FROM_EMAIL,
                 [appointment.user.email],
                 fail_silently=False,
             )
+            messages.success(request, "Вы успешно назначены на запись и она подтверждена")
         else:
-            messages.error(request, "Не удалось подтвердить запись")
+            messages.warning(request, "Эта запись уже имеет назначенного врача")
 
         return redirect("medical_diagnostic:doctor_appointments")
-
-
-class DoctorsDetailView(LoginRequiredMixin, DetailView):
-    model = Doctors
-    template_name = "doctors_detail.html"
-    context_object_name = "doctors"

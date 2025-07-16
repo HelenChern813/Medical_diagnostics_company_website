@@ -64,6 +64,13 @@
                         <div class="col-md-8"><a class="link" href="{% url 'medical_diagnostic:appointments_create' %}">Запись на прием</a>
                         </div>
                     </div>
+                    {% if user.is_doctors %}
+                    <div class="row mb-3">
+                        <div class="col-md-4 fw-bold">Список записей на прием:</div>
+                        <div class="col-md-8"><a class="link" href="{% url 'medical_diagnostic:doctor_appointments' %}">Список записей на прием</a>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 

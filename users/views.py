@@ -78,12 +78,13 @@ class ProfilePageView(LoginRequiredMixin, DetailView):
 
 class OwnerRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
-        if self.get_object() != request.user and not request.user.is_staff:
-            raise PermissionDenied
+        obj = self.get_object()
+        if obj != request.user and not request.user.is_staff:
+            raise PermissionDenied("У вас нет прав для редактирования этого профиля")
         return super().dispatch(request, *args, **kwargs)
 
 
-class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
     model = User
     form_class = ProfileForm
     template_name = "profile_form.html"

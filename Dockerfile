@@ -2,7 +2,7 @@
 FROM python:3.12-slim
 
 # Устанавливаем рабочую директорию в контейнере
-WORKDIR /medical_diagnostic_company_website
+WORKDIR /Medical_diagnostic_company_website
 
 # Копируем файл с зависимостями и устанавливаем их
 COPY poetry.lock pyproject.toml ./
@@ -13,8 +13,8 @@ RUN poetry config virtualenvs.create false \
 # Копируем остальные файлы проекта в контейнер
 COPY . .
 
-RUN mkdir -p /medical_diagnostic_company_website/static
-RUN mkdir -p /medical_diagnostic_company_website/media
+RUN mkdir -p /Medical_diagnostic_company_website/static
+RUN mkdir -p /Medical_diagnostic_company_website/media
 
 # Открываем порт 8000 для взаимодействия с приложением
 EXPOSE 8000

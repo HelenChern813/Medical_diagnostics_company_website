@@ -4,3 +4,7 @@
 venv
 __pycache__
 *.pyc
+.flake8
+README
+nginx/
+nginx.conf

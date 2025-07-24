@@ -131,17 +131,7 @@ python manage.py super_user
 **Запуск сервера:**
    ```bash
 python manage.py runserver
-```
 
-**Загрузка фикстур:**
-1) 
-```bash
-python manage.py loaddata medical_diagnostic_fixture.json
-```
-
-2
-```bash
-python manage.py loaddata users_fixture.json
 ```
 
 

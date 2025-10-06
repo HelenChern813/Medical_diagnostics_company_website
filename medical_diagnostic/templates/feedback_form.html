@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Обратная связь{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Обратная связь</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group mb-3">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.name.errors }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.email.errors }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group mb-3">
+            {{ form.phone.label_tag }}
+            {{ form.phone }}
+            {% if form.phone.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.phone.errors }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group mb-3">
+            {{ form.message.label_tag }}
+            {{ form.message }}
+            {% if form.message.errors %}
+                <div class="invalid-feedback d-block">
+                    {{ form.message.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <div style="display:none;">
+            {{ form.honeypot.label_tag }}
+            {{ form.honeypot }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+</div>
+<script>
+document.getElementById('id_message').addEventListener('input', function() {
+  const errorElement = document.getElementById('message-error');
+  if (this.value.length > 1000) {
+    errorElement.classList.remove('d-none');
+    this.classList.add('is-invalid');
+  } else {
+    errorElement.classList.add('d-none');
+    this.classList.remove('is-invalid');
+  }
+});
+</script>
+{% endblock %}

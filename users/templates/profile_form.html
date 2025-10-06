@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-success shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h4 mb-0"><i class="bi bi-person-gear me-2"></i>Редактирование профиля</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row mb-3">
+                            <div class="col-md-3 text-center">
+                                <img src="{% if form.avatar.value %}{{ form.avatar.value.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
+                                     alt="Текущий аватар"
+                                     class="img-fluid rounded-circle mb-3"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+                                <div class="form-group">
+                                    <label for="id_avatar" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-camera me-1"></i>Изменить фото
+                                        <input type="file" id="id_avatar" name="avatar" class="d-none">
+                                    </label>
+                                    {% if form.avatar.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.avatar.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="id_last_name" class="form-label">Фамилия</label>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.last_name.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="id_first_name" class="form-label">Имя*</label>
+                                        {{ form.first_name }}
+                                        {% if form.first_name.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.first_name.errors }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="id_surname" class="form-label">Отчество</label>
+                                    {{ form.surname }}
+                                    {% if form.surname.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.surname.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Email*</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.email.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_phone_number" class="form-label">Телефон</label>
+                            {{ form.phone_number }}
+                            <small class="form-text text-muted">Только цифры, без пробелов и спецсимволов</small>
+                            {% if form.phone_number.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.phone_number.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a href="{% url 'users:profile' user.pk %}" class="btn btn-secondary me-md-2">Отмена</a>
+                            <button type="submit" class="btn btn-success">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('id_avatar').addEventListener('change', function(event) {
+    const [file] = event.target.files;
+    if (file) {
+        const img = event.target.closest('.row').querySelector('img');
+        img.src = URL.createObjectURL(file);
+    }
+});
+</script>
+{% endblock %}

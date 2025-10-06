@@ -1,0 +1,68 @@
+[
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "last_login": "2025-07-24T10:59:45.085Z",
+        "is_superuser": true,
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-22T10:31:28Z",
+        "email": "admin@exemple.com",
+        "password": "pbkdf2_sha256$1000000$jSbFPf5pgRyTAHzlEuMdLM$oGxtdKzvNsJGPpE9lPS+cEBjDbMSir58ULYFFlTFd/4=",
+        "phone_number": "9270294606",
+        "avatar": "",
+        "token": null,
+        "is_doctors": true,
+        "first_name": "Александр",
+        "last_name": "Александров",
+        "surname": "Александрович",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+        "last_login": "2025-07-23T06:56:42Z",
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-23T06:56:14Z",
+        "email": "chernotalova.e@yandex.ru",
+        "password": "pbkdf2_sha256$1000000$xHWjTBzgAmlZvvHfkf55w7$MYj94BV9YAsP/Xq1Q0cIhns9rx2cMAGaRMdr4sBeS9w=",
+        "phone_number": "9024113249",
+        "avatar": "avatars/7039505418_Q9uD43q.jpg",
+        "token": "f47cf92d8c8cd2f0e3618f88ad893435",
+        "is_doctors": true,
+        "first_name": "Елена",
+        "last_name": "Черноталова",
+        "surname": "Андреевна",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+        "last_login": "2025-07-24T10:59:14.158Z",
+        "is_superuser": false,
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-07-23T06:57:24.161Z",
+        "email": "chernprogram@yandex.ru",
+        "password": "pbkdf2_sha256$1000000$1Ro8isKbsWZDXCtetbjZkZ$LSWUtkwN4OEZ4PHijoaxlKF/pAakW19DMvWPdWQQ78M=",
+        "phone_number": "9024113249",
+        "avatar": "avatars/IMG_3936.JPG",
+        "token": "a6ce09c80cc204067bde276802171748",
+        "is_doctors": false,
+        "first_name": "Ирина",
+        "last_name": "Заречнова",
+        "surname": null,
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]

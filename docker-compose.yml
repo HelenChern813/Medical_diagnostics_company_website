@@ -1,0 +1,37 @@
+services:
+  web:
+    build: .
+    command: >
+        bash -c "python manage.py migrate && python manage.py loaddata medical_diagnostic_fixture.json && python manage.py loaddata users_fixture.json && python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - static_volume:/Medical_diagnostic_company_website/static
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/Medical_diagnostic_company_website/staticfiles
+    depends_on:
+      - web
+
+  db:
+    image: postgres:16.0
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+
+volumes:
+  postgres_data:
+  static_volume:

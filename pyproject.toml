@@ -7,8 +7,46 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+django = "^5.2.4"
+python-dotenv = "^1.1.1"
+psycopg2-binary = "^2.9.10"
+pillow = "^11.3.0"
+requests = "^2.32.4"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+
+
+[tool.poetry.group.lint.dependencies]
+flake8 = "^7.3.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+# Максимальная длина строки
+line-length = 119
+# Файлы, которые не нужно форматировать
+ exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | dist
+  )/
+  | foo.py
+
+)
+'''
+
+[tool.isort]
+# максимальная длина строки
+line_length = 119

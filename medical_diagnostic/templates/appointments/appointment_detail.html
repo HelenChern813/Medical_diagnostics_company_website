@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Запись на прием #{{ object.pk }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Запись на прием</h5>
+                <span class="badge 
+                    {% if object.status == 'confirmed' %}bg-success
+                    {% elif object.status == 'pending' %}bg-warning text-dark
+                    {% elif object.status == 'cancelled' %}bg-secondary
+                    {% else %}bg-info{% endif %}">
+                    {{ object.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-4 fw-bold">Дата и время:</div>
+                    <div class="col-md-8">{{ object.appointment_date|date:"d.m.Y H:i" }}</div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4 fw-bold">Врач:</div>
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center">
+                            {% if object.service.doctor.photo_doctor %}
+                            <img src="{{ object.service.doctor.photo_doctor.url }}" 
+                                 class="rounded-circle me-3" 
+                                 width="50" 
+                                 height="50" 
+                                 alt="{{ object.service.doctor.full_name }}">
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-0">{{ object.service.doctor.full_name }}</h6>
+                                <small class="text-muted">{{ object.service.doctor.comment }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4 fw-bold">Услуга:</div>
+                    <div class="col-md-8">{{ object.service.name }}</div>
+                </div>
+                {% if object.notes %}
+                <div class="row mb-4">
+                    <div class="col-md-4 fw-bold">Примечания:</div>
+                    <div class="col-md-8">{{ object.notes }}</div>
+                </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'medical_diagnostic:appointments_list' %}" class="btn btn-secondary">Назад</a>
+                            {% if object.status == 'pending' %}
+                            <a href="{% url 'medical_diagnostic:appointment_update' object.pk %}" class="btn btn-primary">Изменить</a>
+                            <form method="post" action="{% url 'medical_diagnostic:appointment_cancel' object.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Отменить</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% if request.user.is_doctors and object.status == 'pending' %}
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <form method="post" action="{% url 'medical_diagnostic:confirm_appointment' object.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Подтвердить запись</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
